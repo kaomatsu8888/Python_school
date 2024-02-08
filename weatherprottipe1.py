@@ -1,18 +1,53 @@
 import requests
+import json
 
-# 現在の天気を取得する：東京
-url = "https://www.jma.go.jp/bosai/forecast/data/forecast/130000.json"
-jsondata = requests.get(url).json()
+# JSONファイルを読み込む。検証ツールで取得した天気コード
+weather_code_file_path = "weathercode.json"
+with open(weather_code_file_path, encoding="utf-8") as f:
+    weather_codes = json.load(f)
 
-# 最初の timeSeries セクションから東京地方の情報を取得
-tokyo_area_info = jsondata[0]['timeSeries'][0]['areas'][0]
+url = "https://www.jma.go.jp/bosai/forecast/data/forecast/110000.json"
 
-# 都市名を取得
-city_name = tokyo_area_info['area']['name']
-print(f"都市名 = {city_name}")
+def get_weather_info(code):
+    """天気コードに基づいて説明とアイコンファイル名を取得します。"""
+    code_str = str(code)
+    default_value = {"description": "不明な天気コード", "icon": "unknown.png"}
+    return weather_codes.get(code_str, default_value)
 
-# 天気予報を取得
-weathers = tokyo_area_info['weathers'] # 3日間の天気予報
-print("天気予報 =") # 天気予報を表示
-for i, weather in enumerate(weathers, start=1): # 天気予報を表示
-    print(f"  {i}日目: {weather}")
+def get_weather_forecast():
+    response = requests.get(url)
+    data = response.json()
+
+    # HTMLコンテンツの開始部分
+    html_content = """
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <title>天気予報ビューア</title>
+    </head>
+    <body>
+        <h1>天気予報</h1>
+    """
+
+    for item in data:
+        for series in item["timeSeries"]:
+            if "areas" in series:
+                for area in series["areas"]:
+                    html_content += f"<h2>----{area['area']['name']}----</h2>"
+                    if "weatherCodes" in area:
+                        for i, code in enumerate(area["weatherCodes"]):
+                            weather_info = get_weather_info(code)
+                            html_content += f"<p>{series['timeDefines'][i]}: {weather_info['description']} (アイコン: <img src='{weather_info['icon']}' alt='{weather_info['description']}' style='width: 50px;'>)</p>"
+    
+    # HTMLコンテンツの終了部分
+    html_content += """
+    </body>
+    </html>
+    """
+
+    # HTMLファイルとして保存
+    with open("weather_forecast.html", "w", encoding="utf-8") as file:
+        file.write(html_content)
+
+get_weather_forecast()

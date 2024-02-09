@@ -5,6 +5,7 @@ weight_list = []
 for height_str in height_str_list:
     weight = int(height_str) # 入力された文字列を整数に変換
     weight_list.append(weight) # リストに追加(append)
+    print(weight, "kg")
 
 height_str = input("身長を入力してください(cm):" )
 height = int(height_str) # 入力された文字列を整数に変換

@@ -5,3 +5,6 @@ print(number_of_eto) # 干支を表示
 eto_tuple = ("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥") # 干支のタプル()だったらタプルだよ！！
 eto_name = eto_tuple[number_of_eto] # 干支のタプルから干支の名前を取得
 print(year, "あなたのの干支の順番は", number_of_eto, "番です。", eto_name, "です。") # 干支を表示19
+
+
+

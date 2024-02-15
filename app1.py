@@ -1,33 +1,21 @@
-#fizzbuzz
-# 1. 1から100までの数字を表示するプログラムを書きなさい。
-# 2. 3の倍数のときは数字の代わりに「Fizz」と表示するプログラムを書きなさい。
-# 3. 5の倍数のときは数字の代わりに「Buzz」と表示するプログラムを書きなさい
-# 4. 3と5の倍数のときは数字の代わりに「FizzBuzz」と表示するプログラムを書きなさい。
+# 再度計算を実行します
+# まず、4秒間のサンプリング回数を計算します。
+sampling_rate = 10000  # 10kHz
+sampling_duration = 4  # 4秒
+number_of_samples = sampling_rate * sampling_duration
 
-for i in range(1,101):
-    if i % 3 == 0 and i % 5 == 0:
-        print('FizzBuzz')
-    elif i % 5 == 0:
-        print('Buzz')
-    elif i % 3 == 0:
-        print('Fizz')
-    else:
-        print(i)
+# 各サンプリングデータを16ビット＝2バイトで量子化するためのデータ量を計算します。
+bits_per_sample = 16
+bytes_per_sample = bits_per_sample / 8  # 1バイトは8ビット
+quantized_data_size = number_of_samples * bytes_per_sample
 
+# ADPCMで1/4に圧縮されたデータ量を計算します。
+compression_ratio = 1/4
+compressed_data_size = quantized_data_size * compression_ratio
 
+# 圧縮後のデータ量をkバイト単位で計算します。
+compressed_data_size_kb = compressed_data_size / 1000  # 1kバイトは1000バイト
 
-
-# 自分で書いたコード
-
-# for i in range(1:101):
-#     if i % 3 == 0 or i % 5 == 0
-# elif:
-#     i % 3 == 0
-#     print(Fizz)
-# elif:
-#     i % 5 == 0
-#     print(Buzz)
-# else:
-#     print()
-
+# 結果を表示します。
+print(f"サンプリングデータ量: {quantized_data_size}バイト")
 

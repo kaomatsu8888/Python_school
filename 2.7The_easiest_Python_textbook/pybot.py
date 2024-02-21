@@ -1,6 +1,7 @@
 from pybot_eto import eto_command # eto_command関数をインポート
 from pybot_random import choice_command, dice_command # choice_command関数とdice_command関数をインポート
 
+
 command_file = open('pybot.txt', encoding='utf-8') # ファイルを開く
 raw_data = command_file.read() # ファイルを読み込む
 command_file.close() # ファイルを閉じる
